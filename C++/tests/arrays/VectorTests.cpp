@@ -3,10 +3,8 @@
 #include "arrays/Vector.h"
 #include <gtest/gtest.h>
 
-
-
 class VectorTests : public ::testing::Test {
- protected:
+protected:
   virtual void SetUp() {
     v1.push_back(1);
     v2.push_back(2);
@@ -20,9 +18,7 @@ class VectorTests : public ::testing::Test {
   Vector v2;
 };
 
-TEST_F(VectorTests, InitVec) { 
-    ASSERT_EQ(0, v0.size());
-}
+TEST_F(VectorTests, InitVec) { ASSERT_EQ(0, v0.size()); }
 
 TEST_F(VectorTests, PushBackTests) {
   ASSERT_EQ(1, v1.size());
@@ -34,7 +30,7 @@ TEST_F(VectorTests, PushBackTests) {
 }
 
 TEST_F(VectorTests, InsertTests) {
-  v0.insert(1,0);
+  v0.insert(1, 0);
   EXPECT_EQ(1, v0.at(0));
 
   v1.prepend(5);
@@ -63,15 +59,15 @@ TEST_F(VectorTests, DeleteTests) {
 }
 
 TEST_F(VectorTests, NegativeTests) {
-  ASSERT_DEATH( {v0.at(1);}, "Array Index Out of Bounds: 1");
-  ASSERT_DEATH( {v0.pop();}, "Array Index Out of Bounds: 0");
-  ASSERT_DEATH( {v1.at(-1);}, "Array Index Out of Bounds: -1");
-  ASSERT_DEATH( {v1.deleteAt(1000);}, "Array Index Out of Bounds: 1000");
-  ASSERT_DEATH( {v2.insert(1, 100);}, "Array Index Out of Bounds: 100");
+  ASSERT_DEATH({ v0.at(1); }, "Array Index Out of Bounds: 1");
+  ASSERT_DEATH({ v0.pop(); }, "Array Index Out of Bounds: 0");
+  ASSERT_DEATH({ v1.at(-1); }, "Array Index Out of Bounds: -1");
+  ASSERT_DEATH({ v1.deleteAt(1000); }, "Array Index Out of Bounds: 1000");
+  ASSERT_DEATH({ v2.insert(1, 100); }, "Array Index Out of Bounds: 100");
 }
- 
+
 int main(int argc, char **argv) {
-    testing::InitGoogleTest(&argc, argv);
-    testing::FLAGS_gtest_death_test_style = "threadsafe";
-    return RUN_ALL_TESTS();
+  testing::InitGoogleTest(&argc, argv);
+  testing::FLAGS_gtest_death_test_style = "threadsafe";
+  return RUN_ALL_TESTS();
 }

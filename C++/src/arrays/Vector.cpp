@@ -95,7 +95,8 @@ int Vector::find(int item) {
 }
 
 void Vector::resize(unsigned int newCapacity) {
-  assert(newCapacity > _size && "new capacity should not delete existing elements");
+  assert(newCapacity > _size &&
+         "new capacity should not delete existing elements");
 
   std::unique_ptr<int[]> new_data(new int[newCapacity]);
 
