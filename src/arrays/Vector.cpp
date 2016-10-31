@@ -36,7 +36,7 @@ void Vector::checkIndex(int index) {
   }
 }
 
-int Vector::at(unsigned int index) {
+int Vector::at(int index) {
   checkIndex(index);
   return data[index];
 }
@@ -48,7 +48,14 @@ void Vector::push_back(int item) {
   increaseCapacity();
 }
 
-void Vector::insert(int item, unsigned int index) {
+void Vector::insert(int item, int index) {
+
+  if (index == 0 && _size == 0) {
+    data[0] = item;
+    _size++;
+    return;
+  }
+
   checkIndex(index);
 
   // Move all the elements from @index to one step right till size-1.
@@ -62,7 +69,7 @@ void Vector::insert(int item, unsigned int index) {
   increaseCapacity();
 }
 
-int Vector::deleteAt(unsigned int index) {
+int Vector::deleteAt(int index) {
   checkIndex(index);
 
   int ele = data[index];
@@ -95,13 +102,17 @@ int Vector::find(int item) {
 }
 
 void Vector::resize(unsigned int newCapacity) {
-  assert(newCapacity > _size &&
-         "new capacity should not delete existing elements");
+  if (newCapacity < _size) {
+    printError("new capacity should not delete existing elements");
+    exit(1);
+  }
 
   std::unique_ptr<int[]> new_data(new int[newCapacity]);
 
-  for (int i = 0; i < _size; ++i)
-    new_data[i] = data[i];
+  if (_size != 0) {
+    for (int i = 0; i < _size; ++i)
+      new_data[i] = data[i];
+  }
 
   data = std::move(new_data);
   _capacity = newCapacity;

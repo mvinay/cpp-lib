@@ -39,18 +39,18 @@ public:
 
   bool empty() { return (_size == 0); }
 
-  int at(unsigned int index);
+  int at(int index);
 
   void push_back(int item);
 
-  void insert(int item, unsigned int index);
+  void insert(int item, int index);
 
   // Inserts as the index 0. Moving all others to right.
   // Special case of insert.
   void prepend(int item) { insert(item, 0); }
 
   // Delete at index. Move all the trailing elements left.
-  int deleteAt(unsigned int index);
+  int deleteAt(int index);
 
   // Remove the element at index 0.
   int pop() { return deleteAt(0); }
