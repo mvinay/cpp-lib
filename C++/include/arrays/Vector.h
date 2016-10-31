@@ -4,8 +4,8 @@
 class Vector {
 private:
   std::unique_ptr<int[]> data;
-  unsigned int size;
-  unsigned int capacity;
+  unsigned int _size;
+  unsigned int _capacity;
 
   // Increase the array size by 2.
   static const unsigned int increaseRate = 2;
@@ -33,15 +33,15 @@ public:
 
   Vector(int capacity);
 
-  inline unsigned int getSize() { return size; }
+  inline unsigned int size() { return _size; }
 
-  inline unsigned int getCapacity() { return capacity; }
+  inline unsigned int capacity() { return _capacity; }
 
-  bool isEmpty() { return (size == 0); }
+  bool empty() { return (_size == 0); }
 
   int at(unsigned int index);
 
-  void push(int item);
+  void push_back(int item);
 
   void insert(int item, unsigned int index);
 
