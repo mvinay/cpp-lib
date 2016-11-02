@@ -1,9 +1,19 @@
 #ifndef ARRAYS_VECTOR_H
 #define ARRAYS_VECTOR_H
+
+#include "common/Error.h"
+#include "common/Utils.h"
+
+#include <cassert>
+#include <iostream>
 #include <memory>
-class Vector {
+
+namespace ds {
+
+template <class T, class Comparator = utils::compare> class Vector {
 private:
-  std::unique_ptr<int[]> data;
+  std::unique_ptr<T[]> data;
+  Comparator comparator;
   unsigned int _size;
   unsigned int _capacity;
 
@@ -22,16 +32,38 @@ private:
 
   static const unsigned int initCapacity = 10;
 
-  void increaseCapacity();
+  void increaseCapacity() {
+    if (_size < increaseThreshold * _capacity)
+      return;
 
-  void decreaseCapacity();
+    resize(_capacity * increaseRate);
+  }
 
-  void checkIndex(int index);
+  void decreaseCapacity() {
+    if (_size > decreaseThreshold * _capacity)
+      return;
+
+    resize(_capacity / decreaseRate);
+  }
+
+  void checkIndex(int index) {
+    if (index < 0 || index >= _size) {
+      printError("Array Index Out of Bounds: " + std::to_string(index));
+      exit(1);
+    }
+  }
 
 public:
-  Vector();
+  Vector() {
+    _size = 0;
+    // Re-size the array to 10 as default.
+    resize(initCapacity);
+  }
 
-  Vector(int capacity);
+  Vector(int capacity) {
+    _size = 0;
+    resize(capacity);
+  }
 
   inline unsigned int size() { return _size; }
 
@@ -39,30 +71,98 @@ public:
 
   bool empty() { return (_size == 0); }
 
-  int at(int index);
-
-  void push_back(int item);
-
-  void insert(int item, int index);
-
-  // Inserts as the index 0. Moving all others to right.
-  // Special case of insert.
-  void prepend(int item) { insert(item, 0); }
-
-  // Delete at index. Move all the trailing elements left.
-  int deleteAt(int index);
-
   // Remove the element at index 0.
-  int pop() { return deleteAt(0); }
+  T pop() { return deleteAt(0); }
 
-  // Remove all the items matching item.
-  void remove(int item);
+  void prepend(const T &item) { insert(item, 0); }
 
-  // Returns the first index if found. -1 if not found.
-  int find(int item);
+  T at(int index) {
+    checkIndex(index);
+    return data[index];
+  }
 
-  // On being 3/4th full, double the array size. If only quarter is filled,
-  //  reduce the size by half.
-  void resize(unsigned newCapacity);
+  void push_back(T item) {
+    data[_size] = item;
+    _size++;
+
+    increaseCapacity();
+  }
+
+  void insert(const T &item, int index) {
+
+    if (index == 0 && _size == 0) {
+      data[0] = item;
+      _size++;
+      return;
+    }
+
+    checkIndex(index);
+
+    // Move all the elements from @index to one step right till size-1.
+    for (int i = _size - 1; i >= index; --i) {
+      data[i + 1] = data[i];
+    }
+
+    data[index] = item;
+    _size++;
+
+    increaseCapacity();
+  }
+
+  T deleteAt(int index) {
+    checkIndex(index);
+
+    T ele = data[index];
+
+    for (int i = index; i < _size - 1; ++i)
+      data[i] = data[i + 1];
+
+    _size--;
+    decreaseCapacity();
+    return ele;
+  }
+
+  void remove(const T &item) {
+
+    for (int i = 0; i < _size; ++i) {
+      if (utils::equals(comparator, data[i], item)) {
+        deleteAt(i);
+        --i;
+      }
+    }
+  }
+
+  int find(const T &item) {
+    for (int i = 0; i < _size; ++i) {
+      if (utils::equals(comparator, data[i], item))
+        return i;
+    }
+
+    return -1;
+  }
+
+  void resize(unsigned int newCapacity) {
+    if (newCapacity < _size) {
+      printError("new capacity should not delete existing elements");
+      exit(1);
+    }
+
+    std::unique_ptr<int[]> new_data(new T[newCapacity]);
+
+    if (_size != 0) {
+      for (int i = 0; i < _size; ++i)
+        new_data[i] = data[i];
+    }
+
+    data = std::move(new_data);
+    _capacity = newCapacity;
+  }
+
+  // Overloading the [] operator.
+  T &operator[](int index) {
+    checkIndex(index);
+    return data[index];
+  }
 };
+}
 #endif

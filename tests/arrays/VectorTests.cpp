@@ -1,6 +1,8 @@
 #include "arrays/Vector.h"
 #include <gtest/gtest.h>
 
+using namespace ds;
+
 class VectorTests : public ::testing::Test {
 protected:
   virtual void SetUp() {
@@ -11,9 +13,9 @@ protected:
 
   // virtual void TearDown() {}
 
-  Vector v0;
-  Vector v1;
-  Vector v2;
+  ds::Vector<int> v0{};
+  ds::Vector<int> v1{};
+  ds::Vector<int> v2{};
 };
 
 TEST_F(VectorTests, InitVec) { ASSERT_EQ(0, v0.size()); }
@@ -21,10 +23,12 @@ TEST_F(VectorTests, InitVec) { ASSERT_EQ(0, v0.size()); }
 TEST_F(VectorTests, PushBackTests) {
   ASSERT_EQ(1, v1.size());
   ASSERT_EQ(1, v1.at(0));
+  ASSERT_EQ(1, v1[0]);
 
   ASSERT_EQ(2, v2.size());
   ASSERT_EQ(2, v2.at(0));
   ASSERT_EQ(3, v2.at(1));
+  ASSERT_EQ(3, v2[1]);
 }
 
 TEST_F(VectorTests, InsertTests) {
@@ -84,6 +88,7 @@ TEST_F(VectorTests, CapacityTests) {
 
 TEST_F(VectorTests, NegativeTests) {
   ASSERT_DEATH({ v0.at(1); }, "Array Index Out of Bounds: 1");
+  ASSERT_DEATH({ v0[3]; }, "Array Index Out of Bounds: 3");
   ASSERT_DEATH({ v0.pop(); }, "Array Index Out of Bounds: 0");
   ASSERT_DEATH({ v1.at(-1); }, "Array Index Out of Bounds: -1");
   ASSERT_DEATH({ v1.deleteAt(1000); }, "Array Index Out of Bounds: 1000");
