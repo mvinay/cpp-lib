@@ -48,8 +48,7 @@ private:
 
   void checkIndex(int index) {
     if (index < 0 || index >= _size) {
-      printError("Array Index Out of Bounds: " + std::to_string(index));
-      exit(1);
+      throw std::out_of_range("Array Index Out of Bounds: " + std::to_string(index));
     }
   }
 
@@ -143,8 +142,7 @@ public:
 
   void resize(unsigned int newCapacity) {
     if (newCapacity < _size) {
-      printError("new capacity should not delete existing elements");
-      exit(1);
+      throw std::invalid_argument("new capacity should not delete existing elements");
     }
 
     std::unique_ptr<int[]> new_data(new T[newCapacity]);

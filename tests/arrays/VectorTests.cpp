@@ -87,18 +87,17 @@ TEST_F(VectorTests, CapacityTests) {
 }
 
 TEST_F(VectorTests, NegativeTests) {
-  ASSERT_DEATH({ v0.at(1); }, "Array Index Out of Bounds: 1");
-  ASSERT_DEATH({ v0[3]; }, "Array Index Out of Bounds: 3");
-  ASSERT_DEATH({ v0.pop(); }, "Array Index Out of Bounds: 0");
-  ASSERT_DEATH({ v1.at(-1); }, "Array Index Out of Bounds: -1");
-  ASSERT_DEATH({ v1.deleteAt(1000); }, "Array Index Out of Bounds: 1000");
-  ASSERT_DEATH({ v2.insert(1, 100); }, "Array Index Out of Bounds: 100");
-  ASSERT_DEATH({ v2.resize(1); },
-               "new capacity should not delete existing elements");
+  std::cerr << "\n V0 size is " << v0.size() << "\n";
+  ASSERT_THROW( v0.at(1), std::out_of_range);
+  ASSERT_THROW( v0[3], std::out_of_range);
+  ASSERT_THROW( v0.pop(), std::out_of_range);
+  ASSERT_THROW( v1.at(-1), std::out_of_range);
+  ASSERT_THROW( v1.deleteAt(1000), std::out_of_range);
+  ASSERT_THROW( v2.insert(1, 100), std::out_of_range );
+  ASSERT_THROW( v2.resize(1) , std::invalid_argument);
 }
 
 int main(int argc, char **argv) {
   testing::InitGoogleTest(&argc, argv);
-  testing::FLAGS_gtest_death_test_style = "threadsafe";
   return RUN_ALL_TESTS();
 }
