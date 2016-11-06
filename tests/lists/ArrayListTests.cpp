@@ -1,10 +1,10 @@
-#include "arrays/Vector.h"
+#include "lists/ArrayList.h"
 #include <gtest/gtest.h>
 
 using namespace ds;
 using namespace utils;
 
-class VectorTests : public ::testing::Test {
+class ArrayListTests : public ::testing::Test {
 protected:
   virtual void SetUp() {
     v1.push_back(1);
@@ -14,16 +14,18 @@ protected:
 
   // virtual void TearDown() {}
 
-  ds::Vector<int> v0{};
-  ds::Vector<int> v1{};
-  ds::Vector<int> v2{};
+  ds::ArrayList<int> v0{};
+  ds::ArrayList<int> v1{};
+  ds::ArrayList<int> v2{};
 };
 
-TEST_F(VectorTests, InitVec) { ASSERT_EQ(0, v0.size()); }
+TEST_F(ArrayListTests, InitVec) { ASSERT_EQ(0, v0.size()); }
 
-TEST_F(VectorTests, PushBackTests) {
+TEST_F(ArrayListTests, PushBackTests) {
   ASSERT_EQ(1, v1.size());
   ASSERT_EQ(1, v1.at(0));
+  ASSERT_EQ(1, v1.front());
+  ASSERT_EQ(1, v1.back());
   ASSERT_EQ(1, v1[0]);
 
   ASSERT_EQ(2, v2.size());
@@ -32,7 +34,7 @@ TEST_F(VectorTests, PushBackTests) {
   ASSERT_EQ(3, v2[1]);
 }
 
-TEST_F(VectorTests, InsertTests) {
+TEST_F(ArrayListTests, InsertTests) {
 
   v0.insert(1, 0);
   ASSERT_EQ(1, v0.at(0));
@@ -47,7 +49,7 @@ TEST_F(VectorTests, InsertTests) {
   EXPECT_EQ(3, v2.size());
 }
 
-TEST_F(VectorTests, DeleteTests) {
+TEST_F(ArrayListTests, DeleteTests) {
 
   v0.insert(1, 0);
   EXPECT_EQ(1, v0.pop());
@@ -66,7 +68,7 @@ TEST_F(VectorTests, DeleteTests) {
   EXPECT_EQ(2, v2.size());
 }
 
-TEST_F(VectorTests, FindAndRemoveTests) {
+TEST_F(ArrayListTests, FindAndRemoveTests) {
   v0.push_back(4);
   v0.push_back(3);
 
@@ -80,14 +82,14 @@ TEST_F(VectorTests, FindAndRemoveTests) {
   EXPECT_EQ(4, v0.at(0));
 }
 
-TEST_F(VectorTests, CapacityTests) {
+TEST_F(ArrayListTests, CapacityTests) {
   EXPECT_EQ(true, (v1.capacity() > v1.size()));
 
   v2.resize(100);
   EXPECT_EQ(100, v2.capacity());
 }
 
-TEST_F(VectorTests, NegativeTests) {
+TEST_F(ArrayListTests, NegativeTests) {
   ASSERT_THROW(v0.at(1), std::out_of_range);
   ASSERT_THROW(v0[3], std::out_of_range);
   ASSERT_THROW(v0.pop(), std::out_of_range);
@@ -121,40 +123,43 @@ struct TestComparator {
   }
 };
 
-TEST(GenericVectorTest, AllTests) {
-  Vector<TestObj, TestComparator> TestVector;
+TEST(GenericArrayListTest, AllTests) {
+  ArrayList<TestObj, TestComparator> TestArrayList;
 
   TestObj test;
   test.a = 10;
   test.b = 11;
   test.c = 12;
-  TestVector.push_back(test);
+  TestArrayList.push_back(test);
 
   TestObj test2;
   test2.a = 15;
   test2.b = 16;
   test2.c = 17;
-  TestVector.push_back(test2);
+  TestArrayList.push_back(test2);
 
-  TestVector.push_back(test);
+  TestArrayList.push_back(test);
 
-  EXPECT_EQ(3, TestVector.size());
+  EXPECT_EQ(3, TestArrayList.size());
 
-  EXPECT_EQ(10, TestVector[0].a);
-  EXPECT_EQ(16, TestVector[1].b);
-  EXPECT_EQ(12, TestVector[2].c);
+  EXPECT_EQ(10, TestArrayList[0].a);
+  EXPECT_EQ(16, TestArrayList[1].b);
+  EXPECT_EQ(12, TestArrayList[2].c);
 
-  EXPECT_EQ(0, TestVector.find(test));
+  EXPECT_EQ(0, TestArrayList.find(test));
 
-  TestVector.prepend(test2);
-  EXPECT_EQ(1, TestVector.find(test));
+  TestArrayList.prepend(test2);
+  EXPECT_EQ(1, TestArrayList.find(test));
 
-  TestObj obj = TestVector.pop();
+  TestObj obj = TestArrayList.pop();
   EXPECT_EQ(true, obj.equals(test2));
 
-  TestVector.remove(test);
-  EXPECT_EQ(1, TestVector.size());
-  EXPECT_EQ(16, TestVector[0].b);
+  TestArrayList.remove(test);
+  EXPECT_EQ(1, TestArrayList.size());
+  EXPECT_EQ(16, TestArrayList[0].b);
+
+  TestArrayList.pop_back();
+  EXPECT_EQ(0, TestArrayList.size());
 }
 
 int main(int argc, char **argv) {
