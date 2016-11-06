@@ -2,6 +2,7 @@
 #include <gtest/gtest.h>
 
 using namespace ds;
+using namespace utils;
 
 class VectorTests : public ::testing::Test {
 protected:
@@ -87,14 +88,73 @@ TEST_F(VectorTests, CapacityTests) {
 }
 
 TEST_F(VectorTests, NegativeTests) {
-  std::cerr << "\n V0 size is " << v0.size() << "\n";
-  ASSERT_THROW( v0.at(1), std::out_of_range);
-  ASSERT_THROW( v0[3], std::out_of_range);
-  ASSERT_THROW( v0.pop(), std::out_of_range);
-  ASSERT_THROW( v1.at(-1), std::out_of_range);
-  ASSERT_THROW( v1.deleteAt(1000), std::out_of_range);
-  ASSERT_THROW( v2.insert(1, 100), std::out_of_range );
-  ASSERT_THROW( v2.resize(1) , std::invalid_argument);
+  ASSERT_THROW(v0.at(1), std::out_of_range);
+  ASSERT_THROW(v0[3], std::out_of_range);
+  ASSERT_THROW(v0.pop(), std::out_of_range);
+  ASSERT_THROW(v1.at(-1), std::out_of_range);
+  ASSERT_THROW(v1.deleteAt(1000), std::out_of_range);
+  ASSERT_THROW(v2.insert(1, 100), std::out_of_range);
+  ASSERT_THROW(v2.resize(1), std::invalid_argument);
+}
+
+struct TestObj {
+
+  int a, b, c;
+
+  bool equals(const TestObj &other) const {
+    return (a == other.a && b == other.b && c == other.c);
+  }
+};
+
+struct TestComparator {
+  Result operator()(const TestObj &lhs, const TestObj &rhs) {
+    if (lhs.equals(rhs))
+      return EQ;
+
+    if (lhs.a < rhs.a)
+      return LT;
+
+    if (rhs.b > rhs.b)
+      return GT;
+
+    return LT;
+  }
+};
+
+TEST(GenericVectorTest, AllTests) {
+  Vector<TestObj, TestComparator> TestVector;
+
+  TestObj test;
+  test.a = 10;
+  test.b = 11;
+  test.c = 12;
+  TestVector.push_back(test);
+
+  TestObj test2;
+  test2.a = 15;
+  test2.b = 16;
+  test2.c = 17;
+  TestVector.push_back(test2);
+
+  TestVector.push_back(test);
+
+  EXPECT_EQ(3, TestVector.size());
+
+  EXPECT_EQ(10, TestVector[0].a);
+  EXPECT_EQ(16, TestVector[1].b);
+  EXPECT_EQ(12, TestVector[2].c);
+
+  EXPECT_EQ(0, TestVector.find(test));
+
+  TestVector.prepend(test2);
+  EXPECT_EQ(1, TestVector.find(test));
+
+  TestObj obj = TestVector.pop();
+  EXPECT_EQ(true, obj.equals(test2));
+
+  TestVector.remove(test);
+  EXPECT_EQ(1, TestVector.size());
+  EXPECT_EQ(16, TestVector[0].b);
 }
 
 int main(int argc, char **argv) {
