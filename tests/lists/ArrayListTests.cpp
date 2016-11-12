@@ -66,6 +66,9 @@ TEST_F(ArrayListTests, DeleteTests) {
   EXPECT_EQ(3, v2.at(1));
   EXPECT_EQ(2, v2.at(0));
   EXPECT_EQ(2, v2.size());
+
+  v2.clear();
+  EXPECT_EQ(0, v2.size());
 }
 
 TEST_F(ArrayListTests, FindAndRemoveTests) {
@@ -99,6 +102,12 @@ TEST_F(ArrayListTests, NegativeTests) {
   ASSERT_THROW(v2.resize(1), std::invalid_argument);
 }
 
+TEST_F(ArrayListTests, ReverseTests) {
+  v2.reverse();
+  EXPECT_EQ(3, v2[0]);
+  EXPECT_EQ(2, v2[1]);
+}
+
 struct TestObj {
 
   int a, b, c;
@@ -106,7 +115,13 @@ struct TestObj {
   bool equals(const TestObj &other) const {
     return (a == other.a && b == other.b && c == other.c);
   }
+
+  friend inline std::ostream &operator<<(std::ostream &OS, const TestObj &O);
 };
+
+inline std::ostream &operator<<(std::ostream &OS, const TestObj &O) {
+  return OS << "TestObj[" << O.a << ", " << O.b << ", " << O.c << "]";
+}
 
 struct TestComparator {
   Result operator()(const TestObj &lhs, const TestObj &rhs) {
@@ -137,6 +152,10 @@ TEST(GenericArrayListTest, AllTests) {
   test2.b = 16;
   test2.c = 17;
   TestArrayList.push_back(test2);
+
+  TestArrayList.reverse();
+  EXPECT_EQ(15, TestArrayList[0].a);
+  TestArrayList.reverse();
 
   TestArrayList.push_back(test);
 

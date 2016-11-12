@@ -1,6 +1,7 @@
 #ifndef COMMON_UTILS_H
 #define COMMON_UTILS_H
 
+#include <memory>
 #include <stdexcept>
 
 namespace utils {
@@ -31,5 +32,5 @@ static inline bool equals(Comparator &comparator, const T &lhs, const T &rhs) {
   return (comparator(lhs, rhs) == EQ);
 }
 
-} // end namespace -- ds
+} // end namespace -- utils
 #endif

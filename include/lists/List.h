@@ -24,6 +24,8 @@ public:
 
   inline bool empty() { return (_size == 0); }
 
+  inline void clear() { _size = 0; }
+
   // Get the ith element.
   virtual T at(int index) = 0;
 
@@ -51,6 +53,8 @@ public:
   // Get the last element.
   inline virtual T back() { return at(size() - 1); }
 
+  virtual void reverse() = 0;
+
   // Basic implementation. Every derived class
   // should try to optimize it.
   virtual void remove(const T &item) {
@@ -76,6 +80,14 @@ public:
 
   // Overloading the [] operator.
   virtual T &operator[](int index) = 0;
+
+  virtual void print(std::ostream &OS) {
+    OS << "{ ";
+    for (int i = 0; i < size() - 1; ++i) {
+      OS << at(i) << ", ";
+    }
+    OS << at(size() - 1) << " }";
+  }
 };
 }
 #endif

@@ -108,6 +108,21 @@ public:
     this->checkIndex(index);
     return data[index];
   }
+
+  void reverse() {
+
+    if (this->_size == 0 || this->_size == 1)
+      return;
+
+    unsigned int i = 0;
+    unsigned int j = this->_size - 1;
+
+    while (i < j) {
+      std::swap(data[i], data[j]);
+      i++;
+      j--;
+    }
+  }
 };
 }
 #endif
