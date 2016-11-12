@@ -53,7 +53,7 @@ public:
 
   inline unsigned int capacity() { return _capacity; }
 
-  const T& at(int index) {
+  const T &at(int index) {
     this->checkIndex(index);
     return data[index];
   }

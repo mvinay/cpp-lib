@@ -27,7 +27,7 @@ public:
   inline void clear() { _size = 0; }
 
   // Get the ith element.
-  virtual const T& at(int index) = 0;
+  virtual const T &at(int index) = 0;
 
   // Insert the element at the given postition.
   virtual void insert(const T &item, int index) = 0;

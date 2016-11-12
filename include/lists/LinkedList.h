@@ -4,8 +4,6 @@
 #include "List.h"
 #include "common/Error.h"
 
-#include <cassert>
-
 namespace ds {
 
 /*
@@ -14,34 +12,32 @@ namespace ds {
 template <class T, class Comparator = utils::compare>
 class LinkedList : public List<T, Comparator> {
 private:
-    
-    struct Node {
-      T data;
-      Node* next, *prev;
+  struct Node {
+    T data;
+    Node *next, *prev;
 
-      Node(T _data, Node* _next = nullptr, Node* _prev = nullptr)
+    Node(T _data, Node *_next = nullptr, Node *_prev = nullptr)
         : data(_data), next(_next), prev(_prev) {}
-    };
-    typedef Node* NodePtr;
+  };
+  typedef Node *NodePtr;
 
-    NodePtr head, tail;
+  NodePtr head, tail;
 
-    NodePtr nodeAt(int index) {
-      NodePtr temp = head;
-      while (index > 0) {
-        temp = temp->next;
-        index--;
-      }
-      return temp;
+  NodePtr nodeAt(int index) {
+    NodePtr temp = head;
+    while (index > 0) {
+      temp = temp->next;
+      index--;
     }
+    return temp;
+  }
 
 public:
   LinkedList() : List<T, Comparator>(), head(nullptr), tail(nullptr) {}
 
-  const T& at(int index) {
+  const T &at(int index) {
     this->checkIndex(index);
     NodePtr node = nodeAt(index);
-    assert(node);
     return node->data;
   }
 
@@ -77,7 +73,7 @@ public:
     // Any other node.
     NodePtr temp = nodeAt(index);
     NodePtr previous = temp->prev;
-    
+
     newNode->prev = previous;
     newNode->next = temp;
     previous->next = newNode;
@@ -98,7 +94,7 @@ public:
       } else {
         head = tail = nullptr;
       }
-      
+
     } else if (index == this->_size - 1) {
       // Last Node.
       temp = tail;
@@ -112,7 +108,7 @@ public:
       previous->next = nextNode;
       nextNode->prev = previous;
     }
-      
+
     T data = temp->data;
     delete temp;
     this->_size--;
@@ -121,7 +117,7 @@ public:
 
   void reverse() {
 
-    if (this->_size < 1)
+    if (this->_size <= 1)
       return;
 
     NodePtr temp = head;
