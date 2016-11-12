@@ -27,7 +27,7 @@ public:
   inline void clear() { _size = 0; }
 
   // Get the ith element.
-  virtual T at(int index) = 0;
+  virtual const T& at(int index) = 0;
 
   // Insert the element at the given postition.
   virtual void insert(const T &item, int index) = 0;
@@ -79,7 +79,10 @@ public:
   }
 
   // Overloading the [] operator.
-  virtual T &operator[](int index) = 0;
+  const T &operator[](int index) {
+    this->checkIndex(index);
+    return at(index);
+  }
 
   virtual void print(std::ostream &OS) {
     OS << "{ ";
