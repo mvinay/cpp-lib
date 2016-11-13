@@ -1,5 +1,8 @@
-# cpp-practice
-Basic data structures and algorithms *being* written in c++
+# cpp-lib
+Data structures and algorithms *being* written in c++
 
-## Data structures implemented:
-* **Vector**: templatized, re-sizable containers based out of arrays. (on going)
+## Generic Data structures implemented:
+* **Vector**: re-sizable containers based out of arrays. 
+* **LinkedList**: doubly linked list.
+* **Stack**: LinkedList based implementation
+* **Queue**: LinkedList based implementation
