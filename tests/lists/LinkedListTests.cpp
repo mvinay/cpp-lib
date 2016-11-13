@@ -93,9 +93,11 @@ TEST_F(LinkedListTests, NegativeTests) {
 }
 
 TEST_F(LinkedListTests, ReverseTests) {
+  v2.push_back(10);
   v2.reverse();
-  EXPECT_EQ(3, v2[0]);
-  EXPECT_EQ(2, v2[1]);
+  EXPECT_EQ(10, v2[0]);
+  EXPECT_EQ(3, v2[1]);
+  EXPECT_EQ(2, v2[2]);
 }
 
 struct TestObj {
