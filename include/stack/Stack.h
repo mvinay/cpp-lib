@@ -4,7 +4,9 @@
 #include "lists/LinkedList.h"
 
 namespace ds {
-
+/*
+A LinkedList based implementation of Stack.
+*/
 template <class T> class Stack {
 private:
   LinkedList<T> list;
