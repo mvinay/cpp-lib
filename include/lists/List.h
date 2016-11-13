@@ -6,9 +6,8 @@
 
 namespace ds {
 
-template <class T, class Comparator = utils::compare> class List {
+template <class T> class List {
 protected:
-  Comparator comparator;
   unsigned int _size;
 
   void checkIndex(int index, bool isInsert = false) {
@@ -60,41 +59,10 @@ public:
 
   virtual void reverse() = 0;
 
-  // Basic implementation. Every derived class
-  // should try to optimize it.
-  virtual void remove(const T &item) {
-
-    for (int i = 0; i < size(); ++i) {
-      if (utils::equals(comparator, at(i), item)) {
-        deleteAt(i);
-        --i;
-      }
-    }
-  }
-
-  // Basic implementation. Every derived class
-  // should try to optimize it.
-  virtual int find(const T &item) {
-    for (int i = 0; i < size(); ++i) {
-      if (utils::equals(comparator, at(i), item))
-        return i;
-    }
-
-    return INVALID_INDEX;
-  }
-
   // Overloading the [] operator.
   const T &operator[](int index) {
     this->checkIndex(index);
     return at(index);
-  }
-
-  virtual void print(std::ostream &OS) {
-    OS << "{ ";
-    for (int i = 0; i < size() - 1; ++i) {
-      OS << at(i) << ", ";
-    }
-    OS << at(size() - 1) << " }";
   }
 };
 }

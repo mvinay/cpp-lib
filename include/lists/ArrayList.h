@@ -8,8 +8,7 @@
 
 namespace ds {
 
-template <class T, class Comparator = utils::compare>
-class ArrayList : public List<T, Comparator> {
+template <class T> class ArrayList : public List<T> {
 private:
   std::unique_ptr<T[]> data;
   unsigned int _capacity;
@@ -47,12 +46,12 @@ protected:
   void clearData() {}
 
 public:
-  ArrayList() : List<T, Comparator>() {
+  ArrayList() : List<T>() {
     // Re-size the array to 10 as default.
     resize(initCapacity);
   }
 
-  ArrayList(int capacity) : List<T, Comparator>() { resize(capacity); }
+  ArrayList(int capacity) : List<T>() { resize(capacity); }
 
   inline unsigned int capacity() { return _capacity; }
 

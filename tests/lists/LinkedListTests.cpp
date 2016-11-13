@@ -69,17 +69,6 @@ TEST_F(LinkedListTests, DeleteTests) {
   EXPECT_EQ(0, v2.size());
 }
 
-TEST_F(LinkedListTests, FindAndRemoveTests) {
-  v0.push_back(4);
-  v0.push_back(3);
-  EXPECT_EQ(1, v0.find(3));
-
-  v0.prepend(3);
-  v0.remove(3);
-  EXPECT_EQ(1, v0.size());
-  EXPECT_EQ(4, v0.at(0));
-}
-
 TEST_F(LinkedListTests, NegativeTests) {
   ASSERT_THROW(v0.at(1), std::out_of_range);
   ASSERT_THROW(v0[3], std::out_of_range);
@@ -98,37 +87,11 @@ TEST_F(LinkedListTests, ReverseTests) {
 }
 
 struct TestObj {
-
   int a, b, c;
-
-  bool equals(const TestObj &other) const {
-    return (a == other.a && b == other.b && c == other.c);
-  }
-
-  friend inline std::ostream &operator<<(std::ostream &OS, const TestObj &O);
-};
-
-inline std::ostream &operator<<(std::ostream &OS, const TestObj &O) {
-  return OS << "TestObj[" << O.a << ", " << O.b << ", " << O.c << "]";
-}
-
-struct TestComparator {
-  Result operator()(const TestObj &lhs, const TestObj &rhs) {
-    if (lhs.equals(rhs))
-      return EQ;
-
-    if (lhs.a < rhs.a)
-      return LT;
-
-    if (rhs.b > rhs.b)
-      return GT;
-
-    return LT;
-  }
 };
 
 TEST(GenericLinkedListTest, AllTests) {
-  LinkedList<TestObj, TestComparator> TestLinkedList;
+  LinkedList<TestObj> TestLinkedList;
 
   TestObj test;
   test.a = 10;
@@ -153,21 +116,6 @@ TEST(GenericLinkedListTest, AllTests) {
   EXPECT_EQ(10, TestLinkedList[0].a);
   EXPECT_EQ(16, TestLinkedList[1].b);
   EXPECT_EQ(12, TestLinkedList[2].c);
-
-  EXPECT_EQ(0, TestLinkedList.find(test));
-
-  TestLinkedList.prepend(test2);
-  EXPECT_EQ(1, TestLinkedList.find(test));
-
-  TestObj obj = TestLinkedList.pop();
-  EXPECT_EQ(true, obj.equals(test2));
-
-  TestLinkedList.remove(test);
-  EXPECT_EQ(1, TestLinkedList.size());
-  EXPECT_EQ(16, TestLinkedList[0].b);
-
-  TestLinkedList.pop_back();
-  EXPECT_EQ(0, TestLinkedList.size());
 }
 
 int main(int argc, char **argv) {

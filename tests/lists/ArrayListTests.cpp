@@ -71,20 +71,6 @@ TEST_F(ArrayListTests, DeleteTests) {
   EXPECT_EQ(0, v2.size());
 }
 
-TEST_F(ArrayListTests, FindAndRemoveTests) {
-  v0.push_back(4);
-  v0.push_back(3);
-
-  EXPECT_EQ(1, v0.find(3));
-
-  v0.prepend(3);
-
-  v0.remove(3);
-
-  EXPECT_EQ(1, v0.size());
-  EXPECT_EQ(4, v0.at(0));
-}
-
 TEST_F(ArrayListTests, CapacityTests) {
   EXPECT_EQ(true, (v1.capacity() > v1.size()));
 
@@ -111,35 +97,10 @@ TEST_F(ArrayListTests, ReverseTests) {
 struct TestObj {
 
   int a, b, c;
-
-  bool equals(const TestObj &other) const {
-    return (a == other.a && b == other.b && c == other.c);
-  }
-
-  friend inline std::ostream &operator<<(std::ostream &OS, const TestObj &O);
-};
-
-inline std::ostream &operator<<(std::ostream &OS, const TestObj &O) {
-  return OS << "TestObj[" << O.a << ", " << O.b << ", " << O.c << "]";
-}
-
-struct TestComparator {
-  Result operator()(const TestObj &lhs, const TestObj &rhs) {
-    if (lhs.equals(rhs))
-      return EQ;
-
-    if (lhs.a < rhs.a)
-      return LT;
-
-    if (rhs.b > rhs.b)
-      return GT;
-
-    return LT;
-  }
 };
 
 TEST(GenericArrayListTest, AllTests) {
-  ArrayList<TestObj, TestComparator> TestArrayList;
+  ArrayList<TestObj> TestArrayList;
 
   TestObj test;
   test.a = 10;
@@ -164,21 +125,6 @@ TEST(GenericArrayListTest, AllTests) {
   EXPECT_EQ(10, TestArrayList[0].a);
   EXPECT_EQ(16, TestArrayList[1].b);
   EXPECT_EQ(12, TestArrayList[2].c);
-
-  EXPECT_EQ(0, TestArrayList.find(test));
-
-  TestArrayList.prepend(test2);
-  EXPECT_EQ(1, TestArrayList.find(test));
-
-  TestObj obj = TestArrayList.pop();
-  EXPECT_EQ(true, obj.equals(test2));
-
-  TestArrayList.remove(test);
-  EXPECT_EQ(1, TestArrayList.size());
-  EXPECT_EQ(16, TestArrayList[0].b);
-
-  TestArrayList.pop_back();
-  EXPECT_EQ(0, TestArrayList.size());
 }
 
 int main(int argc, char **argv) {

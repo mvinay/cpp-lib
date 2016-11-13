@@ -9,8 +9,7 @@ namespace ds {
 /*
    A doubly linked list based implementation of the list.
 */
-template <class T, class Comparator = utils::compare>
-class LinkedList : public List<T, Comparator> {
+template <class T> class LinkedList : public List<T> {
 private:
   struct Node {
     T data;
@@ -64,7 +63,7 @@ protected:
   }
 
 public:
-  LinkedList() : List<T, Comparator>(), head(nullptr), tail(nullptr) {}
+  LinkedList() : List<T>(), head(nullptr), tail(nullptr) {}
 
   const T &at(int index) {
     this->checkIndex(index);
@@ -131,20 +130,6 @@ public:
       std::swap(curr->next, curr->prev);
     }
     std::swap(head, tail);
-  }
-
-  // Optimizing find for linked list;
-  int find(const T &item) {
-    NodePtr temp = head;
-    int index = 0;
-    while (temp != nullptr) {
-      if (utils::equals(this->comparator, temp->data, item))
-        return index;
-      index++;
-      temp = temp->next;
-    }
-
-    return INVALID_INDEX;
   }
 };
 }
