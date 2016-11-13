@@ -21,6 +21,8 @@ protected:
 public:
   List() : _size(0) {}
 
+  virtual ~List() {}
+
   inline unsigned int size() { return _size; }
 
   inline bool empty() { return (_size == 0); }

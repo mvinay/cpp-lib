@@ -65,6 +65,8 @@ protected:
 public:
   LinkedList() : List<T>(), head(nullptr), tail(nullptr) {}
 
+  ~LinkedList() { this->clear(); }
+
   const T &at(int index) {
     this->checkIndex(index);
     NodePtr node = nodeAt(index);
