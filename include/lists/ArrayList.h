@@ -10,7 +10,7 @@ namespace ds {
 
 template <class T> class ArrayList : public List<T> {
 private:
-  std::unique_ptr<T[]> data;
+  T *data;
   unsigned int _capacity;
 
   // Increase the array size by 2.
@@ -46,12 +46,26 @@ protected:
   void clearData() {}
 
 public:
+  typedef T *iterator;
+
+  iterator begin() { return &data[0]; }
+
+  iterator end() { return (begin() + this->_size); }
+
+  typedef const T *const_iterator;
+
+  const_iterator begin() const { return &data[0]; }
+
+  const_iterator end() const { return (begin() + this->_size); }
+
   ArrayList() : List<T>() {
     // Re-size the array to 10 as default.
     resize(initCapacity);
   }
 
-  ArrayList(int capacity) : List<T>() { resize(capacity); }
+  ~ArrayList() { delete[] data; }
+
+  ArrayList(int capacity) : List<T>() { resize(capacity, true); }
 
   inline unsigned int capacity() { return _capacity; }
 
@@ -88,21 +102,23 @@ public:
     return ele;
   }
 
-  void resize(unsigned int newCapacity) {
+  void resize(unsigned int newCapacity, bool increaseSize = false) {
     if (newCapacity < this->_size) {
       throw std::invalid_argument(
           "new capacity should not delete existing elements");
     }
 
-    std::unique_ptr<T[]> new_data(new T[newCapacity]);
+    T *new_data = new T[newCapacity];
 
     if (this->_size != 0) {
       for (int i = 0; i < this->_size; ++i)
         new_data[i] = data[i];
     }
 
-    data = std::move(new_data);
+    data = new_data;
     _capacity = newCapacity;
+    if (increaseSize)
+      this->_size = newCapacity;
   }
 
   // Overloading the [] operator.

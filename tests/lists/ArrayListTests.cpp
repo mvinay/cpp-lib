@@ -1,6 +1,8 @@
 #include "lists/ArrayList.h"
 #include <gtest/gtest.h>
 
+#include <algorithm>
+
 using namespace ds;
 using namespace utils;
 
@@ -125,6 +127,16 @@ TEST(GenericArrayListTest, AllTests) {
   EXPECT_EQ(10, TestArrayList[0].a);
   EXPECT_EQ(16, TestArrayList[1].b);
   EXPECT_EQ(12, TestArrayList[2].c);
+}
+
+TEST(IteratorTests, IteratorTests) {
+  ds::ArrayList<int> vec(5);
+  int n = 0;
+  std::generate(vec.begin(), vec.end(), [&n] { return n++; });
+  int val = 0;
+  for (const auto I : vec) {
+    EXPECT_EQ(val++, I);
+  }
 }
 
 int main(int argc, char **argv) {
