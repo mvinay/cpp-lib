@@ -1,5 +1,5 @@
-#ifndef ARRAYS_VECTOR_H
-#define ARRAYS_VECTOR_H
+#ifndef ARRAYS_LIST_H
+#define ARRAYS_LIST_H
 
 #include "List.h"
 #include "common/Error.h"
@@ -42,6 +42,9 @@ private:
 
     resize(_capacity / decreaseRate);
   }
+
+protected:
+  void clearData() {}
 
 public:
   ArrayList() : List<T, Comparator>() {

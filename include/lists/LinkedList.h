@@ -1,5 +1,5 @@
-#ifndef ARRAYS_VECTOR_H
-#define ARRAYS_VECTOR_H
+#ifndef LINKED_LIST_H
+#define LINKED_LIST_H
 
 #include "List.h"
 #include "common/Error.h"
@@ -20,16 +20,47 @@ private:
         : data(_data), next(_next), prev(_prev) {}
   };
   typedef Node *NodePtr;
-
   NodePtr head, tail;
 
   NodePtr nodeAt(int index) {
+    if (index == this->_size - 1)
+      return tail;
+
     NodePtr temp = head;
     while (index > 0) {
       temp = temp->next;
       index--;
     }
     return temp;
+  }
+
+  T deleteNode(NodePtr node) {
+    NodePtr prevNode = node->prev;
+    NodePtr nextNode = node->next;
+
+    if (prevNode) {
+      prevNode->next = nextNode;
+    }
+
+    if (nextNode) {
+      nextNode->prev = prevNode;
+    }
+
+    T data = node->data;
+    delete node;
+    return data;
+  }
+
+protected:
+  void clearData() {
+    NodePtr temp = head;
+    while (temp) {
+      NodePtr curr = temp;
+      temp = temp->next;
+      delete curr;
+    }
+
+    head = tail = nullptr;
   }
 
 public:
@@ -43,26 +74,15 @@ public:
 
   void insert(const T &item, int index) {
     this->checkIndex(index, true);
-
     NodePtr newNode = new Node(item);
 
-    // First node.
-    if (index == 0) {
-      if (this->_size == 0) {
-        head = tail = newNode;
-        this->_size++;
-        return;
-      }
-
-      newNode->next = head;
-      head->prev = newNode;
-      head = newNode;
+    if (this->_size == 0) {
+      head = tail = newNode;
       this->_size++;
       return;
     }
 
-    // Last node.
-    if (index == this->_size) {
+    if (this->_size == index) {
       tail->next = newNode;
       newNode->prev = tail;
       tail = newNode;
@@ -70,53 +90,37 @@ public:
       return;
     }
 
-    // Any other node.
     NodePtr temp = nodeAt(index);
-    NodePtr previous = temp->prev;
+    NodePtr prevNode = temp->prev;
+    if (prevNode) {
+      prevNode->next = newNode;
+      newNode->prev = prevNode;
+    }
 
-    newNode->prev = previous;
-    newNode->next = temp;
-    previous->next = newNode;
     temp->prev = newNode;
+    newNode->next = temp;
+
+    if (index == 0) {
+      head = newNode;
+    } else if (index == this->_size) {
+      tail = newNode;
+    }
     this->_size++;
   }
 
   T deleteAt(int index) {
     this->checkIndex(index);
-    NodePtr temp = nullptr;
-    // First Node.
-    if (index == 0) {
-      temp = head;
-
-      if (this->_size != 1) {
-        head = head->next;
-        head->prev = nullptr;
-      } else {
-        head = tail = nullptr;
-      }
-
-    } else if (index == this->_size - 1) {
-      // Last Node.
-      temp = tail;
+    NodePtr temp = nodeAt(index);
+    if (index == 0)
+      head = head->next;
+    else if (index == this->_size - 1)
       tail = tail->prev;
-      tail->next = nullptr;
-    } else {
-      // Any other node.
-      temp = nodeAt(index);
-      NodePtr previous = temp->prev;
-      NodePtr nextNode = temp->next;
-      previous->next = nextNode;
-      nextNode->prev = previous;
-    }
-
-    T data = temp->data;
-    delete temp;
+    T data = deleteNode(temp);
     this->_size--;
     return data;
   }
 
   void reverse() {
-
     if (this->_size <= 1)
       return;
 
@@ -126,10 +130,21 @@ public:
       temp = temp->next;
       std::swap(curr->next, curr->prev);
     }
+    std::swap(head, tail);
+  }
 
-    temp = head;
-    head = tail;
-    tail = temp;
+  // Optimizing find for linked list;
+  int find(const T &item) {
+    NodePtr temp = head;
+    int index = 0;
+    while (temp != nullptr) {
+      if (utils::equals(this->comparator, temp->data, item))
+        return index;
+      index++;
+      temp = temp->next;
+    }
+
+    return INVALID_INDEX;
   }
 };
 }

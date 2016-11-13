@@ -17,6 +17,8 @@ protected:
                               std::to_string(index));
   }
 
+  virtual void clearData() = 0;
+
 public:
   List() : _size(0) {}
 
@@ -24,7 +26,10 @@ public:
 
   inline bool empty() { return (_size == 0); }
 
-  inline void clear() { _size = 0; }
+  inline void clear() {
+    clearData();
+    _size = 0;
+  }
 
   // Get the ith element.
   virtual const T &at(int index) = 0;

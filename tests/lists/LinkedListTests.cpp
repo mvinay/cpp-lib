@@ -72,13 +72,10 @@ TEST_F(LinkedListTests, DeleteTests) {
 TEST_F(LinkedListTests, FindAndRemoveTests) {
   v0.push_back(4);
   v0.push_back(3);
-
   EXPECT_EQ(1, v0.find(3));
 
   v0.prepend(3);
-
   v0.remove(3);
-
   EXPECT_EQ(1, v0.size());
   EXPECT_EQ(4, v0.at(0));
 }
