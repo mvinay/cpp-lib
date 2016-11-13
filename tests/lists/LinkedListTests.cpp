@@ -118,6 +118,13 @@ TEST(GenericLinkedListTest, AllTests) {
   EXPECT_EQ(12, TestLinkedList[2].c);
 }
 
+TEST_F(LinkedListTests, IteratorTests) {
+  int val = 2;
+  for (auto I : v2) {
+    EXPECT_EQ(val++, I);
+  }
+}
+
 int main(int argc, char **argv) {
   testing::InitGoogleTest(&argc, argv);
   return RUN_ALL_TESTS();
