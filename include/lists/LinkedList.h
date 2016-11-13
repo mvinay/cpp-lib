@@ -50,6 +50,20 @@ private:
     return data;
   }
 
+  class iterator {
+  public:
+    NodePtr node;
+
+    iterator(NodePtr _node) : node(_node) {}
+
+    void operator++(int) { node = node->next; }
+    void operator++() { node = node->next; }
+
+    T operator*() { return node->data; }
+
+    bool operator!=(const iterator &other) { return (node != other.node); }
+  };
+
 protected:
   void clearData() {
     NodePtr temp = head;
@@ -66,6 +80,10 @@ public:
   LinkedList() : List<T>(), head(nullptr), tail(nullptr) {}
 
   ~LinkedList() { this->clear(); }
+
+  iterator begin() { return iterator(head); }
+
+  iterator end() { return iterator(nullptr); }
 
   const T &at(int index) {
     this->checkIndex(index);
