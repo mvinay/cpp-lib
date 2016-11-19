@@ -1,5 +1,5 @@
-#ifndef CPP_STACK_H
-#define CPP_STACK_H
+#ifndef CPP_QUEUE_H
+#define CPP_QUEUE_H
 
 #include "lists/LinkedList.h"
 
